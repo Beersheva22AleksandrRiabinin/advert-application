@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import telran.advert.model.Advert;
@@ -39,17 +41,24 @@ import telran.advert.service.AdvertServiceImpl;
 @Validated //only for controller **
 public class AdvertController {
 	
-	final AdvertServiceImpl service;
+//	final AdvertServiceImpl service;
+	final AdvertService service;
+//	AdvertService service; //
+//	final AdvertService serviceImpl; //otherwise test works with real service
+//	final ObjectMapper mapper;
+	//should we check category somewhere somehow???
 	
-	//should we check category somewhere???
-	
+//	@PostMapping("/add")
 	@PostMapping
 	String addAdvert(@RequestBody @Valid Advert advert) {
 		log.debug("controller received an advert {} to add", advert.name);
-		return service.addAdvert(advert);
+		String res = service.addAdvert(advert);
+		log.debug(res);
+		return res;
 	}
 	
 	@PutMapping
+//	@PutMapping("/update")
 	String updateAdvert(@RequestBody @Valid Advert advert) {
 		log.debug("controller received an advert {} to update", advert.id);
 		return service.updateAdvert(advert);
@@ -58,12 +67,12 @@ public class AdvertController {
 //	@GetMapping("/all") //different gets, so mb necessary
 	@GetMapping
 	List<Advert> getAllAdverts() {
-		log.debug("controller received request for getting all adverts");
+		log.trace("controller received request for getting all adverts");
 		return service.getAll();
 	}
 	
-	@DeleteMapping("/{id}") //also cors
-	String deleteAdvert(@PathVariable(name = "id") @Valid int id) {
+	@DeleteMapping("/{id}")
+	String deleteAdvert(@PathVariable(name = "id") int id) {
 		log.debug("controller received request for deleting {}", id);
 		return service.deleteAdvert(id);
 	}
@@ -74,16 +83,22 @@ public class AdvertController {
 		return service.getByCategory(category);
 	}
 	
+	@GetMapping("price/{price}")
+	List<Advert> getAdvertsMaxPrice(@PathVariable(name = "price") int price) {
+		log.debug("controller received request for getting adverts cheaper than {}", price);
+		return service.getByMaxPrice(price);
+	}
+	
 	@PostConstruct
 	void init() {
-		
-		log.info("registered service {}", service.getClass().toString());
-//		log.info("....222 adverts restored");
+//		service = serviceImpl;
+		log.info("registered service {}", service.getClass().getSimpleName());
+		service.restore();
 	}
 	
 	@PreDestroy
 	void shutdown() {
-//		log.info("...saved");
+		service.save();
 		log.info("context closed");
 	}
 	
