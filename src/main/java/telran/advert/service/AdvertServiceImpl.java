@@ -114,7 +114,7 @@ public class AdvertServiceImpl implements AdvertService{
 	public void save() {
 		try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
 			output.writeObject(getAll());
-			log.debug("saved");
+			log.info("saved");
 		} catch (Exception e) {
 			throw new RuntimeException(e.toString());
 		}
@@ -126,7 +126,7 @@ public class AdvertServiceImpl implements AdvertService{
 		try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
 			List<Advert> allAdverts = (List<Advert>) input.readObject();
 			allAdverts.forEach(this::addAdvert);
-			log.debug("restored {} adverts", allAdverts.size());
+			log.info("restored {} adverts", allAdverts.size());
 		} catch (FileNotFoundException e) {
 			//
 		} catch (Exception e) {

@@ -16,8 +16,9 @@ import lombok.Data;
 public class Advert implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	@NotNull(message = "should not be empty")
+	
 	public int id;
+	@NotEmpty(message = "should not be empty") //wrong field name
 	@Pattern(regexp = "[a-zA-z\s,]+", message = "category value mismatches pattern") //post
 	public String category;
 	@Positive(message = "price should be positive")

@@ -33,22 +33,16 @@ import telran.advert.service.AdvertService;
 import telran.advert.service.AdvertServiceImpl;
 
 
-//@CrossOrigin //CORS ¯\_(ツ)_/¯
-@RestController //based on this class will be created servlet
+@CrossOrigin //CORS
+@RestController
 @RequestMapping("adverts")
-@RequiredArgsConstructor //final fields
+@RequiredArgsConstructor
 @Slf4j
-@Validated //only for controller **
+@Validated
 public class AdvertController {
 	
-//	final AdvertServiceImpl service;
 	final AdvertService service;
-//	AdvertService service; //
-//	final AdvertService serviceImpl; //otherwise test works with real service
-//	final ObjectMapper mapper;
-	//should we check category somewhere somehow???
 	
-//	@PostMapping("/add")
 	@PostMapping
 	String addAdvert(@RequestBody @Valid Advert advert) {
 		log.debug("controller received an advert {} to add", advert.name);
@@ -58,13 +52,11 @@ public class AdvertController {
 	}
 	
 	@PutMapping
-//	@PutMapping("/update")
 	String updateAdvert(@RequestBody @Valid Advert advert) {
 		log.debug("controller received an advert {} to update", advert.id);
 		return service.updateAdvert(advert);
 	}
 	
-//	@GetMapping("/all") //different gets, so mb necessary
 	@GetMapping
 	List<Advert> getAllAdverts() {
 		log.trace("controller received request for getting all adverts");
@@ -91,7 +83,6 @@ public class AdvertController {
 	
 	@PostConstruct
 	void init() {
-//		service = serviceImpl;
 		log.info("registered service {}", service.getClass().getSimpleName());
 		service.restore();
 	}
@@ -102,14 +93,14 @@ public class AdvertController {
 		log.info("context closed");
 	}
 	
-	@Configuration
-	@EnableWebMvc
-	public class CorsConfiguration implements WebMvcConfigurer {
-		//CORS ¯\_(ツ)_/¯
-	    @Override
-	    public void addCorsMappings(CorsRegistry registry) {
-	        registry.addMapping("/**").allowedMethods("GET", "POST","PUT", "DELETE");
-	    }
-	}
+//	@Configuration
+//	@EnableWebMvc
+//	public class CorsConfiguration implements WebMvcConfigurer {
+//		//CORS
+//	    @Override
+//	    public void addCorsMappings(CorsRegistry registry) {
+//	        registry.addMapping("/**").allowedMethods("GET", "POST","PUT", "DELETE");
+//	    }
+//	}
 
 }
