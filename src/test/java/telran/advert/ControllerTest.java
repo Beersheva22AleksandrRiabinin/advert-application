@@ -78,7 +78,6 @@ class MockService implements AdvertService {
 	
 }
 
-
 @WebMvcTest({ AdvertController.class, MockService.class })
 class ControllerTest {
 	
@@ -90,17 +89,16 @@ class ControllerTest {
 	
 	Advert advert;
 	String baseUrl = "http://localhost:8080/adverts";
-//	String addUrl = String.format("%s/add", baseUrl);
-//	String updateUrl = String.format("%s/update", baseUrl);
 
 	@BeforeEach
 	void setUp() {
 		advert = new Advert();
-//		advert.id = 0;
-//		advert.category = "vehicle";
-//		advert.price = 123;
-//		advert.name = "test";
-//		advert.details = "test";
+		//otherwise MethodArgumentNotValidException
+		advert.id = 0;
+		advert.category = "vehicle";
+		advert.price = 123;
+		advert.name = "test";
+		advert.details = "test";
 	}
 
 	@Test
@@ -113,104 +111,73 @@ class ControllerTest {
 		String messageJson = mapper.writeValueAsString(advert);
 		String response = mockMvc.perform(post(baseUrl)
 				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isOk())
+				.andDo(print()).andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		assertEquals("addtest", response);
 	}
-//	private ResultActions getRequestBase(String messageJson) throws Exception {
-//		return mockMvc.perform(post(baseUrl)
-//				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-//				.andDo(print());
-//	}
 	@Test
 	void updateTest() throws Exception {
 		String messageJson = mapper.writeValueAsString(advert);
 		String response = mockMvc.perform(put(baseUrl)
 				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isOk())
+				.andDo(print()).andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		assertEquals("updatetest", response);
 	}
 	@Test
 	void getAllTest() throws Exception {
-		String messageJson = mapper.writeValueAsString(advert);
 		int response = mockMvc.perform(get(baseUrl)
-				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isOk())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isOk())
 				.andReturn().getResponse().getContentLength();
 		assertEquals(0, response);
 	}
 	@Test
 	void deleteTest() throws Exception {
-		String messageJson = mapper.writeValueAsString(advert);
 		String response = mockMvc.perform(delete(baseUrl + "/123123")
-				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isOk())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		assertEquals("deletetest", response);
 	}	
 	@Test
 	void wrongPathTest() throws Exception {
-		String messageJson = mapper.writeValueAsString(advert);
 		String response = mockMvc.perform(put(baseUrl + "/qwe")
-				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isBadRequest())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 		assertTrue(response.contains("wrong path")); //
 	}
 	@Test
 	void categoryTest() throws Exception {
-		String messageJson = mapper.writeValueAsString(advert);
 		int response = mockMvc.perform(get(baseUrl + "/category/doesntmatter")
-				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isOk())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isOk())
 				.andReturn().getResponse().getContentLength();
 		assertEquals(0, response);
 	}
 	@Test
 	void priceTest() throws Exception {
-		String messageJson = mapper.writeValueAsString(advert);
 		int response = mockMvc.perform(get(baseUrl + "/price/12345")
-				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isOk())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isOk())
 				.andReturn().getResponse().getContentLength();
 		assertEquals(0, response);
 	}
 	@Test
 	void notFoundTest() throws Exception {
-		String messageJson = mapper.writeValueAsString(advert);
 		int response = mockMvc.perform(get(baseUrl + "/")
-				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isNotFound()) // <- here is our test, expected status
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isNotFound()) // <- here is our test, expected status
 				.andReturn().getResponse().getContentLength();
 		assertEquals(0, response);
 	}
-//	@Test
-//	void categoryValidationTest() throws Exception {
-//		String messageJson = mapper.writeValueAsString(advert);
-//		String response = mockMvc.perform(get(baseUrl + "category/67890")
-//				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-//				.andDo(print())
-//				.andExpect(status().isNotFound())
-//				.andReturn().getResponse().getContentAsString();
-//		System.out.println(response);
-//		assertTrue(response.contains("category value mismatches pattern"));
-//	}
-//	@Test
+	@Test
 	void wrongArgumentTypeTest() throws Exception {
 		String messageJson = mapper.writeValueAsString(advert);
-		String response = mockMvc.perform(get(baseUrl + "price/QQ")
+		String response = mockMvc.perform(get(baseUrl + "/price/qq")
 				.contentType(MediaType.APPLICATION_JSON).content(messageJson))
-				.andDo(print())
-				.andExpect(status().isBadRequest())
+				.andDo(print()).andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 		assertTrue(response.contains("Failed to convert value"));
 	}

@@ -34,8 +34,8 @@ public class AdvertServiceImpl implements AdvertService{
 		advert.id = id;
 		
 		adverts.put(id, advert);
-		advertsByCategory.computeIfAbsent(advert.category, c -> new HashSet<>()).add(advert);
-		advertsByPrice.computeIfAbsent(advert.price, p -> new HashSet<>()).add(advert);
+		advertsByCategory.computeIfAbsent(advert.category, s -> new HashSet<>()).add(advert);
+		advertsByPrice.computeIfAbsent(advert.price, s -> new HashSet<>()).add(advert);
 		String res = String.format("advert %s with id %s has been added", advert.name, advert.id);
 		return res;
 	}
@@ -132,7 +132,6 @@ public class AdvertServiceImpl implements AdvertService{
 		} catch (Exception e) {
 			throw new RuntimeException(e.toString());
 		}
-		
 	}
 	
 }

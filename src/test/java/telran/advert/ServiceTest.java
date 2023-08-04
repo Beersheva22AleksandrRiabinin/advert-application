@@ -15,7 +15,7 @@ import telran.advert.service.AdvertServiceImpl;
 @SpringBootTest
 class ServiceTest {
 	
-//	@Autowired
+//	@Autowired //otherwise test works with initial state of real maps
 	AdvertService service;
 	
 	Advert advert1;
