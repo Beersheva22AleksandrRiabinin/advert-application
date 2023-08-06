@@ -27,7 +27,7 @@ import telran.advert.model.Advert;
 import telran.advert.service.AdvertService;
 import telran.advert.service.AdvertServiceImpl;
 
-//@Service
+@Service
 class MockService implements AdvertService {
 
 	@Override
@@ -45,7 +45,7 @@ class MockService implements AdvertService {
 	@Override
 	public List<Advert> getAll() {
 		
-		return new ArrayList<Advert>();
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -57,7 +57,7 @@ class MockService implements AdvertService {
 	@Override
 	public List<Advert> getByCategory(String category) {
 
-		return new ArrayList<Advert>();
+		return Collections.emptyList();
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import telran.advert.exceptions.NotFoundException;
 import telran.advert.model.Advert;
 
-@Service
+@Service("service") //
 @Slf4j
 public class AdvertServiceImpl implements AdvertService{
 	
@@ -46,7 +46,6 @@ public class AdvertServiceImpl implements AdvertService{
 		if (!adverts.containsKey(advert.id)) {
 			throw new NotFoundException(String.format("advert with id %s doesn't exist", advert.id));
 		}
-		
 		
 		Set<Advert> setByCategory = advertsByCategory.get(advert.category);
 		setByCategory.removeIf(a -> a.id == advert.id);

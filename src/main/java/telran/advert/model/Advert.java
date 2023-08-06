@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -19,14 +20,13 @@ public class Advert implements Serializable {
 	
 	public int id;
 	@NotEmpty(message = "should not be empty") //wrong field name
-	@Pattern(regexp = "[a-zA-z\s,]+", message = "category value mismatches pattern") //post
+	@Pattern(regexp = "^(?! )[a-zA-Z\s,]+", message = "category value mismatches pattern")
 	public String category;
 	@Positive(message = "price should be positive")
-//	@Max(value = Integer.MAX_VALUE, message = "too expensive")
 	public int price;
-	@NotEmpty(message = "should not be empty") //wrong field name
+	@NotEmpty(message = "should not be empty")
 	public String name;
-	@NotEmpty(message = "should not be empty") //wrong field name
+	@NotEmpty(message = "should not be empty")
 	public String details;
 
 }

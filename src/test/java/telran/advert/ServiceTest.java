@@ -50,11 +50,11 @@ class ServiceTest {
 		int id = getId(str);
 		advert1.id = id;
 		advert1.name = "qq";
-		String expected = String.format("advert with id %s has been updated", id);
+		String expected = String.format("advert with id %d has been updated", id);
 		assertEquals(expected, service.updateAdvert(advert1));
 		
 		advert1.id = 123;
-		String exp = (String.format("advert with id %s doesn't exist", id));
+		String exp = (String.format("advert with id %d doesn't exist", id));
 		assertThrowsExactly(NotFoundException.class, () -> service.updateAdvert(advert1), exp);
 	}
 	private int getId(String str) {
@@ -75,7 +75,7 @@ class ServiceTest {
 		String expected = String.format("advert with id %d has been deleted", id);
 		assertEquals(expected, service.deleteAdvert(id));
 		
-		String exp = (String.format("advert with id %s doesn't exist", id));
+		String exp = (String.format("advert with id %d doesn't exist", id));
 		assertThrowsExactly(NotFoundException.class, () -> service.deleteAdvert(id), exp);
 	}
 	@Test

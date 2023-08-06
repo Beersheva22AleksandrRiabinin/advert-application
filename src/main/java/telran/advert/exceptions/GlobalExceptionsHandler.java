@@ -32,7 +32,7 @@ public class GlobalExceptionsHandler {
 		return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(value = { HttpMessageNotReadableException.class }) // all advert fields with wrong names
+	@ExceptionHandler(value = { HttpMessageNotReadableException.class }) // all fields with wrong names
 	ResponseEntity<String> illegalArgumentHandler(RuntimeException e) {
 		String errorMessage = e.getMessage();
 		log.error(errorMessage);
