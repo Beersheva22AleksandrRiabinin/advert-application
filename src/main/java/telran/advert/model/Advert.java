@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
+@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION) //we need this annotation only if we have subclasses
 public class Advert implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
