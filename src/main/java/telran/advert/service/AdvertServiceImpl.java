@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -21,23 +24,32 @@ public class AdvertServiceImpl implements AdvertService{
 	private static final int MIN_ID = 100000;
 	private static final int MAX_ID = 1000000;
 	
+	ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	ReadLock readLock = lock.readLock();
+	WriteLock writeLock = lock.writeLock();
+	
 	Map<Integer, Advert> adverts = new HashMap<>();
 	Map<String, Set<Advert>> advertsByCategory = new HashMap<>();
 	TreeMap<Integer, Set<Advert>> advertsByPrice = new TreeMap<>();
 
 	@Override
 	public String addAdvert(Advert advert) {
-		int id = 0;
-		do {
-			id = (int) (Math.random() * (MAX_ID - MIN_ID) + MIN_ID);
-		} while (adverts.containsKey(id));
-		advert.id = id;
-		
-		adverts.put(id, advert);
-		advertsByCategory.computeIfAbsent(advert.category, s -> new HashSet<>()).add(advert);
-		advertsByPrice.computeIfAbsent(advert.price, s -> new HashSet<>()).add(advert);
-		String res = String.format("advert %s with id %s has been added", advert.name, advert.id);
-		return res;
+		writeLock.lock();
+		try {
+			int id = 0;
+			do {
+				id = (int) (Math.random() * (MAX_ID - MIN_ID) + MIN_ID);
+			} while (adverts.containsKey(id));
+			advert.id = id;
+			
+			adverts.put(id, advert);
+			advertsByCategory.computeIfAbsent(advert.category, s -> new HashSet<>()).add(advert);
+			advertsByPrice.computeIfAbsent(advert.price, s -> new HashSet<>()).add(advert);
+			String res = String.format("advert %s with id %s has been added", advert.name, advert.id);
+			return res;			
+		} finally {
+			writeLock.unlock();
+		}
 	}
 
 	@Override
