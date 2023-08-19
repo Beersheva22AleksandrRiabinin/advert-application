@@ -16,7 +16,7 @@ import telran.advert.service.AdvertServiceImpl;
 class ServiceTest {
 	
 //	@Autowired //otherwise test works with initial state of real maps
-	AdvertService service;
+	AdvertServiceImpl service;
 	
 	Advert advert1;
 	Advert advert2;
